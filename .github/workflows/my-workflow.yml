@@ -1,10 +1,14 @@
-name: Manual install
-
+name: Manual build & test
 on:
   workflow_dispatch:
+    inputs:
+      run-tests:
+        description: "Run tests?"
+        required: true
+        default: "false"
 
 jobs:
-  install:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,4 +27,5 @@ jobs:
         run: npm run build
 
       - name: Test application
+        if: ${{ github.event.inputs.run-tests == 'true' }}
         run: npm test

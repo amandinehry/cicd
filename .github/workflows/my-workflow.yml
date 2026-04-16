@@ -31,3 +31,18 @@ jobs:
       - name: Test application
         if: ${{ github.event.inputs.run-tests == 'true' || github.event_name == 'pull_request' }}
         run: npm test
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: ${{ secrets.CICD_POSTGRES_DB }}
+          POSTGRES_USER: ${{ secrets.CICD_POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.CICD_POSTGRES_PASSWORD }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
